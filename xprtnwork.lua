@@ -183,19 +183,22 @@ local function drawBorders() -- Draw Borders
 	draw.Text(iwWindowX + (draw.GetTextSize("===================") / 20), iwWindowY + iwWindowHeight + iwWindowHeightOffset - 13, "==================");
 end
 
-function GetCurrentWeaponMinDmg()
+local function GetCurrentWeaponMinDmg()
 	-- Get Current Weapon
-	currentWeapon = localPlayer:GetWeaponID();
-	
-	-- Check if Current Weapon is one of the B1G weps
-	if currentWeapon == 11 or currentWeapon == 38 then -- Auto Sniper
-		return (mdState and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue());
-	elseif currentWeapon == 1 or currentWeapon == 64 then -- Revolver / Deagle
-		return (mdState and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue());
-	elseif currentWeapon == 40 then -- Scout
-		return (mdState and mdScoutMin:GetValue() or mdScoutMax:GetValue());
-	elseif currentWeapon == 9 then -- AWP
-		return (mdState and mdAWPMin:GetValue() or mdAWPMax:GetValue());
+	if entities.GetLocalPlayer() ~= nil then
+		local curWep = entities.GetLocalPlayer():GetWeaponID();
+		-- Check if Current Weapon is one of the B1G weps
+		if curWep == 11 or curWep == 38 then -- Auto Sniper
+			return (mdState and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue());
+		elseif curWep == 1 or curWep == 64 then -- Revolver / Deagle
+			return (mdState and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue());
+		elseif curWep == 40 then -- Scout
+			return (mdState and mdScoutMin:GetValue() or mdScoutMax:GetValue());
+		elseif curWep == 9 then -- AWP
+			return (mdState and mdAWPMin:GetValue() or mdAWPMax:GetValue());
+		else
+			return "NORMAL";
+		end
 	else
 		return "NORMAL";
 	end
