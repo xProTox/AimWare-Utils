@@ -182,6 +182,25 @@ local function drawBorders() -- Draw Borders
 	draw.Text(iwWindowX + (draw.GetTextSize("===================") / 20), iwWindowY + 3, "==================");
 	draw.Text(iwWindowX + (draw.GetTextSize("===================") / 20), iwWindowY + iwWindowHeight + iwWindowHeightOffset - 13, "==================");
 end
+
+function GetCurrentWeaponMinDmg()
+	-- Get Current Weapon
+	currentWeapon = localPlayer:GetWeaponID();
+	
+	-- Check if Current Weapon is one of the B1G weps
+	if currentWeapon == 11 or currentWeapon == 38 then -- Auto Sniper
+		return (mdState and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue());
+	elseif currentWeapon == 1 or currentWeapon == 64 then -- Revolver / Deagle
+		return (mdState and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue());
+	elseif currentWeapon == 40 then -- Scout
+		return (mdState and mdScoutMin:GetValue() or mdScoutMax:GetValue());
+	elseif currentWeapon == 9 then -- AWP
+		return (mdState and mdAWPMin:GetValue() or mdAWPMax:GetValue());
+	else
+		return "NORMAL";
+	end
+end
+
 local function drawTextIndicator(type, fps_active, ping_active, cp_active, md_active) -- Draw Indicator Items
 	tmp_height_offset = 0;
 	item_count = 0;
@@ -225,11 +244,8 @@ local function drawTextIndicator(type, fps_active, ping_active, cp_active, md_ac
 		end
 		return
 	elseif type == 3 then -- Draw Min Damage
-		if mdState == false then -- Minimized Damage
-			indicator_text = "Min Damage: TOGGLED";
-		else -- Normal Damage
-			indicator_text = "Min Damage: OFF";
-		end
+		currentMinDmg = GetCurrentWeaponMinDmg();
+		indicator_text = "Min-Dmg: " .. currentMinDmg;
 		indicator_y_offset = indicator_y_offset + (fps_active and 20 or 0) + (ping_active and 20 or 0) + (cp_active and 20 or 0);
 	end
 
