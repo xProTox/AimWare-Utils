@@ -34,7 +34,7 @@
 			<Checkbox var="wnd_col_txt" name="Colorize Text">
 				<ColorPicker var="wnd_txt_clr" value="240 30 20 255"/>
 			</Checkbox>
-			<Slider var="wnd_txt_x_pos" name="Horizontal Text Position" desc="Horizontal Text Position" min="0" max="100"/>
+			<Slider var="wnd_txt_x_pos" name="Horizontal Text Position" desc="Horizontal Text Position" min="0" max="90"/>
 			<Multibox name="Indicator Items">
 				<Checkbox var="wnd_items_fps" name="FPS"/>
 				<Checkbox var="wnd_items_ping" name="Ping"/>
