@@ -1,0 +1,82 @@
+<!------- Author: xprtnwork | https://aimware.net/forum/user/225577 ----->
+<Window var="xprtnwork_menu" name="xPrTnWork's" width="550" height="500">
+	<Tab name="Settings">
+		<Checkbox var="masterSwitch" name="Master Switch"/>
+		<Groupbox name="Slow Walk">
+			<Checkbox var="sw_random" name="Randomize Speed"/>
+			<Slider var="sw_speed_min" name="Minimal Speed" desc="Minimal Speed" min="0" max="100"/>
+			<Slider var="sw_speed_max" name="Maximal Speed" desc="Maximal Speed" min="0" max="100"/>
+			<Slider var="sw_random_interval" name="Update Interval(Ticks)" desc="Update Interval(Ticks)" min="0" max="100"/>
+			<Keybox var="sw_key" name="Key"/>
+		</Groupbox>
+		<Groupbox name="Fake Lag">
+			<Multibox name="Disable on">
+				<Checkbox var="fl_knife" name="Knife"/>
+				<Checkbox var="fl_zeus" name="Zeus"/>
+				<Checkbox var="fl_revolver" name="Revolver"/>
+				<Checkbox var="fl_scout" name="Scout"/>
+				<Checkbox var="fl_asniper" name="Auto Sniper"/>
+				<Checkbox var="fl_awp" name="AWP"/>
+				<Checkbox var="fl_sw" name="Slow Walk"/>
+			</Multibox>
+		</Groupbox>
+	</Tab>
+	<Tab name="Indicator">
+		<Groupbox name="Settings">
+			<Checkbox var="wnd_enable" name="Enable"/>
+			<Checkbox var="wnd_lock" name="Lock Window"/>
+			<Checkbox var="wnd_bg" name="Draw Background">
+				<ColorPicker var="wnd_bg_clr" value="240 30 20 255"/>
+			</Checkbox>
+			<Checkbox var="wnd_ol" name="Draw Outline">
+				<ColorPicker var="wnd_ol_clr" value="240 30 20 255"/>
+			</Checkbox>
+			<Checkbox var="wnd_col_txt" name="Colorize Text">
+				<ColorPicker var="wnd_txt_clr" value="240 30 20 255"/>
+			</Checkbox>
+			<Slider var="wnd_txt_x_pos" name="Horizontal Text Position" desc="Horizontal Text Position" min="0" max="100"/>
+			<Multibox name="Indicator Items">
+				<Checkbox var="wnd_items_fps" name="FPS"/>
+				<Checkbox var="wnd_items_ping" name="Ping"/>
+				<Checkbox var="wnd_items_spackets" name="Sent Packets"/>
+				<Checkbox var="wnd_items_mindmg" name="Min Damage"/>
+			</Multibox>
+		</Groupbox>
+	</Tab>
+	<Tab name="Min Damage">
+		<Groupbox name="Settings">
+			<Checkbox var="md_enable" name="Enable"/>
+			<Keybox var="md_toggle_key" name="Key"/>
+			<Multibox name="Set on Weapon">
+				<Checkbox var="md_weapon_hpistol" name="Revolver/Deagle"/>
+				<Checkbox var="md_weapon_scout" name="Scout"/>
+				<Checkbox var="md_weapon_awp" name="AWP"/>
+				<Checkbox var="md_weapon_asniper" name="Auto Sniper"/>
+			</Multibox>
+			<Slider var="md_mindmg_hpistol" name="Revolver/Deagle Min Damage" desc="Revolver/Deagle Min Damage" min="0" max="100"/>
+			<Slider var="md_maxdmg_hpistol" name="Revolver/Deagle Normal Damage" desc="Revolver/Deagle Normal Damage" min="0" max="100"/>
+			<Slider var="md_mindmg_scout" name="Scout Min Damage" desc="Scout Min Damage" min="0" max="100"/>
+			<Slider var="md_maxdmg_scout" name="Scout Normal Damage" desc="Scout Normal Damage" min="0" max="100"/>
+			<Slider var="md_mindmg_awp" name="AWP Min Damage" desc="AWP Min Damage" min="0" max="100"/>
+			<Slider var="md_maxdmg_awp" name="AWP Normal Damage" desc="AWP Normal Damage" min="0" max="100"/>
+			<Slider var="md_mindmg_asniper" name="Auto Sniper Min Damage" desc="Auto Sniper Min Damage" min="0" max="100"/>
+			<Slider var="md_maxdmg_asniper" name="Auto Sniper Normal Damage" desc="Auto Sniper Normal Damage" min="0" max="100"/>
+		</Groupbox>
+	</Tab>
+	<Tab name="Anti Aim">
+		<Groupbox name="Settings">
+			<Checkbox var="aa_enable" name="Enable"/>
+			<Checkbox var="aa_flick_rotation_onsent" name="Invert Rotation on Sent Packet"/>
+			<Slider var="aa_flick_interval" name="Flick on X sent packet" desc="Flick on X sent packet" min="-0" max="100"/>
+			<Combobox var="aa_lby_mode" name="LBY Mode" options=["Jitter","Cycle","Switch"]/>
+			<Multibox name="Set On">
+				<Checkbox var="aa_dir_base" name="Base"/>
+				<Checkbox var="aa_dir_left" name="Left"/>
+				<Checkbox var="aa_dir_right" name="Right"/>
+			</Multibox>
+			<Slider var="aa_lby_min" name="LBY Minimal Offset" desc="LBY Minimal Offset" min="-180" max="180"/>
+			<Slider var="aa_lby_max" name="LBY Maximal Offset" desc="LBY Maximal Offset" min="-180" max="180"/>
+			<Slider var="aa_lby_interval" name="Update Interval(Ticks)" desc="Update Interval(Ticks)" min="-0" max="100"/>
+		</Groupbox>
+	</Tab>
+</Window>
