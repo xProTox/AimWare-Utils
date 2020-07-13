@@ -412,22 +412,21 @@ local function cmPulse(cmd)
 	if not masterSwitch:GetValue() then
 		return
 	end
-	
+	updateAA()
 	if hasFlicked then
-		hasFlicked = false;
+		hasFlicked = false
 		if aaLBYSetOnBase:GetValue() then -- Update Base LBY
-			originalBaseRotation = gui.GetValue("rbot.antiaim.base.rotation");
-			gui.SetValue("rbot.antiaim.base.rotation", originalBaseRotation);
+			originalBaseRotation = gui.GetValue("rbot.antiaim.base.rotation")
+			gui.SetValue("rbot.antiaim.base.rotation", originalBaseRotation)
 		end
 		if aaLBYSetOnLeft:GetValue() then -- Update Left LBY
-			originalLeftRotation = gui.GetValue("rbot.antiaim.left.rotation");
-			gui.SetValue("rbot.antiaim.left.rotation", originalLeftRotation);
+			originalLeftRotation = gui.GetValue("rbot.antiaim.left.rotation")
+			gui.SetValue("rbot.antiaim.left.rotation", originalLeftRotation)
 		end
 		if aaLBYSetOnRight:GetValue() then -- Update Right LBY
-			originalRightRotation = gui.GetValue("rbot.antiaim.right.rotation");
-			gui.SetValue("rbot.antiaim.right.rotation", originalRightRotation);
+			originalRightRotation = gui.GetValue("rbot.antiaim.right.rotation")
+			gui.SetValue("rbot.antiaim.right.rotation", originalRightRotation)
 		end
-		return;
 	end
 	tickCount = cmd.tick_count;
 	commandNumber = cmd.command_number;
@@ -459,7 +458,6 @@ local function cmPulse(cmd)
 	
 	updateSW();
 	updateFL();
-	updateAA();
 end
 ----------------------------------
 
