@@ -158,10 +158,17 @@ local function updateQP(cmd) -- Update Quick Peek
 			return
 		end
 		if qp_has_shot then
-			curAngle = {engine.GetViewAngles().x, engine.GetViewAngles().y, engine.GetViewAngles().z}
+			curAngle = EulerAngles()
+			curAngle.pitch = engine.GetViewAngles().x
+			curAngle.yaw = engine.GetViewAngles().y
+			curAngle.roll = engine.GetViewAngles().z
 			worldAngle = {vector.Subtract( {qp_pos.x, qp_pos.y, qp_pos.z},  {localPlayer:GetAbsOrigin().x, localPlayer:GetAbsOrigin().y, localPlayer:GetAbsOrigin().z} )}
-			cmd.forwardmove = ( ( (math.sin(math.rad(curAngle[2]) ) * worldAngle[2]) + (math.cos(math.rad(curAngle[2]) ) * worldAngle[1]) ) * 200 )
-			cmd.sidemove = ( ( (math.cos(math.rad(curAngle[2]) ) * -worldAngle[2]) + (math.sin(math.rad(curAngle[2]) ) * worldAngle[1]) ) * 200 )
+
+			moveForward = ((math.sin(math.rad(curAngle.yaw)) * worldAngle[2]) + (math.cos(math.rad(curAngle.yaw)) * worldAngle[1])) * 800
+			cmd.forwardmove = moveForward
+			moveSide = ((math.cos(math.rad(curAngle.yaw)) * -worldAngle[2]) + (math.sin(math.rad(curAngle.yaw)) * worldAngle[1])) * 800
+			cmd.sidemove = moveSide
+			
 			if vector.Length(worldAngle) <= 10.0 then
 				qp_finished = true
 			end
