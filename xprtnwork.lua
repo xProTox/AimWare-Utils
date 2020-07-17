@@ -67,6 +67,10 @@ local mdAutoSniper						= xprtnMenu:Reference("md_weapon_asniper");
 local mdAutoSniperMin					= xprtnMenu:Reference("md_mindmg_asniper");
 local mdAutoSniperMax					= xprtnMenu:Reference("md_maxdmg_asniper");
 ----------------------------------
+-- Quick Peek
+local qpEnable					= xprtnMenu:Reference("qp_enable");
+local qpKeybind					= xprtnMenu:Reference("qp_key");
+----------------------------------
 local screenWidth				= 0;
 local screenHeight				= 0;
 local cmChockeStart				= 0;
@@ -99,6 +103,72 @@ local mdState					= false;
 ----------------------------------
 
 
+local localPlayer = 0
+
+local qp_active = false
+local qp_pos = Vector3(0, 0, 0)
+local qp_has_shot = false
+local qp_finished = false
+local function drawQP() -- Draw Quick Peek
+	-- If Keybind is pressed and isQP is false, init new quick peek, if isQP continue old
+	if qpKeybind:GetValue() ~= 0 then
+		if input.IsButtonDown(qpKeybind:GetValue()) and not qp_finished then
+			if not qp_active and input.IsButtonPressed(qpKeybind:GetValue()) then
+				qp_pos = localPlayer:GetAbsOrigin()
+				qp_active = true
+				qp_has_shot = false
+				qp_finished = false
+			end
+			if qp_pos.x ~= nil and not qp_finished and qp_active then
+				sX, sY = client.WorldToScreen(qp_pos)
+				cX, cY = client.WorldToScreen(localPlayer:GetAbsOrigin())
+				if sX == nil then sX = 0 end
+				if sY == nil then sY = 0 end
+				if sX < 0 then sX = 0 end
+				if sY < 0 then sY = 0 end
+				if sX >= screenWidth then sX = screenWidth end
+				if sY >= screenHeight then sY = screenHeight end
+				draw.Color((qp_has_shot and 95 or 155), (qp_has_shot and 155 or 95), 95, 255)
+				draw.FilledCircle(sX, sY, 15)
+				draw.Color(95, 95, 255, 150)
+				draw.FilledCircle(sX, sY, 12)
+				draw.Color((qp_has_shot and 95 or 155), (qp_has_shot and 155 or 95), 95, 255)
+				draw.Line(sX, sY, cX, cY)
+				draw.Line(sX+1, sY, cX, cY)
+				draw.Line(sX-1, sY, cX, cY)
+			end
+		elseif qp_finished then
+			qp_active = false
+			qp_pos = Vector3(0, 0, 0)
+			qp_has_shot = false
+			qp_finished = false
+		else
+			qp_active = false
+			qp_pos = Vector3(0, 0, 0)
+			qp_has_shot = false
+			qp_finished = false
+		end
+	end
+end
+local function updateQP(cmd) -- Update Quick Peek
+	if qpEnable:GetValue() and qp_active then
+		-- if in air, cancel quick peek
+		if bit.band(localPlayer:GetPropInt("m_fFlags"), 1) == 0 then
+			qp_finished = true
+			return
+		end
+		if qp_has_shot then
+			curAngle = {engine.GetViewAngles().x, engine.GetViewAngles().y, engine.GetViewAngles().z}
+			worldAngle = {vector.Subtract( {qp_pos.x, qp_pos.y, qp_pos.z},  {localPlayer:GetAbsOrigin().x, localPlayer:GetAbsOrigin().y, localPlayer:GetAbsOrigin().z} )}
+			cmd.forwardmove = ( ( (math.sin(math.rad(curAngle[2]) ) * worldAngle[2]) + (math.cos(math.rad(curAngle[2]) ) * worldAngle[1]) ) * 200 )
+			cmd.sidemove = ( ( (math.cos(math.rad(curAngle[2]) ) * -worldAngle[2]) + (math.sin(math.rad(curAngle[2]) ) * worldAngle[1]) ) * 200 )
+			if vector.Length(worldAngle) <= 10.0 then
+				qp_finished = true
+			end
+		end
+	end
+end
+
 local function updateSW() -- Update Slow Walk
 	if swKey:GetValue() ~= 0 then -- Is Button defined and pressed
 		if not input.IsButtonDown(swKey:GetValue()) then
@@ -128,7 +198,6 @@ local function updateFL() -- Update Fake Lag
 	else
 		return;
 	end
-	localPlayer = entities.GetLocalPlayer();
 	currentWeapon = localPlayer:GetWeaponID();
 	if flKnife:GetValue() then -- Disable on Knife
 		if isHoldingKnife(currentWeapon) then
@@ -185,22 +254,26 @@ end
 
 local function GetCurrentWeaponMinDmg()
 	-- Get Current Weapon
-	if entities.GetLocalPlayer() ~= nil then
-		local curWep = entities.GetLocalPlayer():GetWeaponID();
-		-- Check if Current Weapon is one of the B1G weps
-		if curWep == 11 or curWep == 38 then -- Auto Sniper
-			return (mdState == false and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue());
-		elseif curWep == 1 or curWep == 64 then -- Revolver / Deagle
-			return (mdState == false and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue());
-		elseif curWep == 40 then -- Scout
-			return (mdState == false and mdScoutMin:GetValue() or mdScoutMax:GetValue());
-		elseif curWep == 9 then -- AWP
-			return (mdState == false and mdAWPMin:GetValue() or mdAWPMax:GetValue());
+	if localPlayer ~= nil and localPlayer ~= 0 then
+		if isAlive() then
+			local curWep = localPlayer:GetWeaponID()
+			-- Check if Current Weapon is one of the B1G weps
+			if curWep == 11 or curWep == 38 then -- Auto Sniper
+				return (mdState == false and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue())
+			elseif curWep == 1 or curWep == 64 then -- Revolver / Deagle
+				return (mdState == false and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue())
+			elseif curWep == 40 then -- Scout
+				return (mdState == false and mdScoutMin:GetValue() or mdScoutMax:GetValue())
+			elseif curWep == 9 then -- AWP
+				return (mdState == false and mdAWPMin:GetValue() or mdAWPMax:GetValue())
+			else
+				return "NORMAL"
+			end
 		else
-			return "NORMAL";
+			return "NORMAL"
 		end
 	else
-		return "NORMAL";
+		return "NORMAL"
 	end
 end
 
@@ -226,8 +299,8 @@ local function drawTextIndicator(type, fps_active, ping_active, cp_active, md_ac
 		indicator_text = "Ping: " .. getPing();
 		indicator_y_offset = indicator_y_offset + (fps_active == true and 20 or 0);
 	elseif type == 2 then -- Draw Chocked Commands
-		local cp_x = iwWindowX + indicator_x_offset + 60 + 90;
-        local count_chokedpackets = 0;
+		cp_x = iwWindowX + indicator_x_offset + 60 + 90;
+        count_chokedpackets = 0;
         indicator_y_offset = indicator_y_offset + (fps_active and 20 or 0) + (ping_active and 20 or 0);
         if isAlive() and cmIsChocking then count_chokedpackets = tickCount - (cmChockeStart - 1); end
         if infoColoredText:GetValue() then drawRect(iwWindowX + (cp_x < iwWindowX + iwWindowWidth and indicator_x_offset or 47) + 60, iwWindowY + indicator_y_offset, 90, 14, 111, 111, 111, 190);
@@ -403,15 +476,18 @@ local function dPulse()
 	if not masterSwitch:GetValue() then
 		return
 	end
-	
-	updateIW();
-	updateMinDamage();
+		
+	drawQP()
+	updateIW()
+	updateMinDamage()
 end
 ----------------------------------
 local function cmPulse(cmd)
 	if not masterSwitch:GetValue() then
 		return
 	end
+	localPlayer = entities.GetLocalPlayer()
+	updateQP(cmd)
 	updateAA()
 	if hasFlicked then
 		hasFlicked = false
@@ -455,12 +531,23 @@ local function cmPulse(cmd)
 			cmChockeStart = tickCount;
 		end
 	end
-	
-	updateSW();
-	updateFL();
+
+	updateSW()
+	updateFL()
 end
 ----------------------------------
 
 callbacks.Register('Draw', dPulse);
 callbacks.Register('CreateMove', cmPulse);
 
+callbacks.Register( "FireGameEvent", function(Event)
+	if qpEnable:GetValue() then
+        local_index = client.GetLocalPlayerIndex();
+        victim_index = client.GetPlayerIndexByUserID( Event:GetInt( "userid" ) );
+        attacker_index = client.GetPlayerIndexByUserID( Event:GetInt( "attacker" ) );
+
+        if ( victim_index == local_index and attacker_index ~= local_index ) then
+            qp_has_shot = true
+        end
+	end
+end)
