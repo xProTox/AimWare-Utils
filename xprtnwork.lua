@@ -189,13 +189,13 @@ local function GetCurrentWeaponMinDmg()
 		local curWep = entities.GetLocalPlayer():GetWeaponID();
 		-- Check if Current Weapon is one of the B1G weps
 		if curWep == 11 or curWep == 38 then -- Auto Sniper
-			return (mdState and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue());
+			return (mdState == false and mdAutoSniperMin:GetValue() or mdAutoSniperMax:GetValue());
 		elseif curWep == 1 or curWep == 64 then -- Revolver / Deagle
-			return (mdState and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue());
+			return (mdState == false and mdHeavyPistolMin:GetValue() or mdHeavyPistolMax:GetValue());
 		elseif curWep == 40 then -- Scout
-			return (mdState and mdScoutMin:GetValue() or mdScoutMax:GetValue());
+			return (mdState == false and mdScoutMin:GetValue() or mdScoutMax:GetValue());
 		elseif curWep == 9 then -- AWP
-			return (mdState and mdAWPMin:GetValue() or mdAWPMax:GetValue());
+			return (mdState == false and mdAWPMin:GetValue() or mdAWPMax:GetValue());
 		else
 			return "NORMAL";
 		end
