@@ -2,6 +2,10 @@
 <Window var="xprtnwork_menu" name="xPrTnWork's" width="550" height="500">
 	<Tab name="Settings">
 		<Checkbox var="masterSwitch" name="Master Switch"/>
+		<Groupbox name="Quick Peek">
+			<Checkbox var="qp_enable" name="Enable"/>
+			<Keybox var="qp_key" name="Key"/>
+		</Groupbox>
 		<Groupbox name="Slow Walk">
 			<Checkbox var="sw_random" name="Randomize Speed"/>
 			<Slider var="sw_speed_min" name="Minimal Speed" desc="Minimal Speed" min="0" max="100"/>
