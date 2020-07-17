@@ -166,7 +166,7 @@ local function updateQP(cmd) -- Update Quick Peek
 
 			moveForward = ((math.sin(math.rad(curAngle.yaw)) * worldAngle[2]) + (math.cos(math.rad(curAngle.yaw)) * worldAngle[1])) * 800
 			cmd.forwardmove = moveForward
-			moveSide = ((math.cos(math.rad(curAngle.yaw)) * -worldAngle[2]) + (math.sin(math.rad(curAngle.yaw)) * worldAngle[1])) * 800
+			moveSide = ((math.cos(math.rad(curAngle.yaw)) * -worldAngle[2]) + (math.sin(math.rad(curAngle.yaw)) * worldAngle[1])) * 200
 			cmd.sidemove = moveSide
 			
 			if vector.Length(worldAngle) <= 10.0 then
